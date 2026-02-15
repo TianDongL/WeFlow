@@ -192,7 +192,7 @@ function GroupAnalyticsPage() {
           break
         }
         case 'ranking': {
-          const result = await window.electronAPI.groupAnalytics.getGroupMessageRanking(selectedGroup.username, 20, startTime, endTime)
+          const result = await window.electronAPI.groupAnalytics.getGroupMessageRanking(selectedGroup.username, -1, startTime, endTime)
           if (result.success && result.data) setRankings(result.data)
           break
         }

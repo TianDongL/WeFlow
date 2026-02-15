@@ -84,7 +84,7 @@ class GroupAnalyticsService {
 
     const suffixMatch = trimmed.match(/^(.+)_([a-zA-Z0-9]{4})$/)
     const cleaned = suffixMatch ? suffixMatch[1] : trimmed
-    
+
     return cleaned
   }
 
@@ -495,7 +495,7 @@ class GroupAnalyticsService {
     }
   }
 
-  async getGroupMessageRanking(chatroomId: string, limit: number = 20, startTime?: number, endTime?: number): Promise<{ success: boolean; data?: GroupMessageRank[]; error?: string }> {
+  async getGroupMessageRanking(chatroomId: string, limit: number = -1, startTime?: number, endTime?: number): Promise<{ success: boolean; data?: GroupMessageRank[]; error?: string }> {
     try {
       const conn = await this.ensureConnected()
       if (!conn.success) return { success: false, error: conn.error }
@@ -519,7 +519,10 @@ class GroupAnalyticsService {
           }
         })
         .sort((a, b) => b.messageCount - a.messageCount)
-        .slice(0, limit)
+
+      if (limit > 0) {
+        rankings.splice(limit)
+      }
 
       // 批量获取显示名称和头像
       const usernames = rankings.map(r => r.member.username)
